@@ -1,4 +1,4 @@
-# SehatNama AI - Medical Report znalyzer
+# SehatNama AI - Medical Report Analyzer
 
 SehatNama AI is a healthcare document Analyzer system designed for Pakistan-focused use cases. It processes medical PDFs/images, extracts structured findings, highlights risky values when present, and generates bilingual patient-facing summaries in English and Urdu.
 
