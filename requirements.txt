@@ -1,0 +1,10 @@
+streamlit
+opencv-python
+pytesseract
+pymupdf
+numpy
+pandas
+transformers
+sentencepiece
+torch
+pytest
