@@ -1,79 +1,112 @@
-# SehatNama AI - Pakistani Lab Report Analyzer
+# SehatNama AI - Medical Report Intelligence
 
-Real-world healthcare AI project for Pakistan: upload a lab report image/PDF, extract test values with OCR, detect abnormal ranges, and explain findings in English + Urdu.
+SehatNama AI is a healthcare document intelligence system designed for Pakistan-focused use cases. It processes medical PDFs/images, extracts structured findings, highlights risky values when present, and generates bilingual patient-facing summaries in English and Urdu.
 
-## Why this project is real (not API glue)
+This is not a chatbot wrapper and does not depend on paid LLM APIs for core functionality.
 
-- Solves a local problem: most patients receive technical lab reports without understandable explanation.
-- Runs without paid LLM APIs (no OpenRouter/Apify).
-- Uses your core AI strengths:
-  - Computer Vision / OCR for report reading
-  - Clinical-NLP style parsing from noisy text
-  - Rule-based medical interpretation with Pakistani lab ranges
-- Produces patient-friendly bilingual output.
+## Problem We Solve
 
-## Current MVP Features
+Medical reports are often difficult for patients and families to understand, especially when:
 
-- Upload report files (`PDF`, `JPG`, `PNG`)
-- OCR extraction from scans and image-based PDFs
-- Multi-mode OCR (`fast`, `balanced`, `max_accuracy`) for latency/accuracy tradeoff
-- Parsing common CBC/LFT/RFT/diabetes markers
-- Abnormality flagging (high/low) with reference ranges
-- Per-row confidence scoring and low-confidence warnings
-- Unit normalization + sanity checks to catch OCR outliers
-- Template profile detection (`CBC`, `BMP`, `LFT`, `RFT`, `GENERIC`)
-- English + Urdu patient explanation
-- Downloadable summary text report + structured JSON export
+- report format changes across hospitals and clinics,
+- scans are noisy or rotated,
+- content mixes narrative sections with numeric findings,
+- the patient needs explanation in Urdu.
 
-## Tech Stack
+SehatNama AI turns those reports into structured, readable output with quality warnings and machine-friendly JSON export.
+
+## Product Capabilities
+
+- Accepts `PDF`, `JPG`, `JPEG`, and `PNG` medical reports.
+- Multi-pass OCR pipeline with configurable modes:
+  - `fast` for lower latency
+  - `balanced`
+  - `max_accuracy` for strongest extraction
+- Handles both:
+  - numeric result reports
+  - clinical narrative reports (symptoms, diagnosis, treatment, prescription, follow-up)
+- Per-row confidence scoring with low-confidence warnings.
+- Unit normalization and sanity checks for reliability.
+- Structured bilingual summaries (English + Urdu).
+- Structured JSON export for API/backoffice integration.
+- Benchmark dashboard with precision/recall/F1 and latency analytics.
+
+## Architecture (Industry Style)
+
+1. **Ingestion Layer**  
+   File upload, type detection, PDF rendering, image decode.
+
+2. **OCR Layer**  
+   Multi-variant preprocessing + rotation + OCR mode search.
+
+3. **Normalization Layer**  
+   OCR cleanup, unit normalization, numeric standardization.
+
+4. **Extraction Layer**  
+   Rule-based parsers for numeric rows and narrative sections.
+
+5. **Validation Layer**  
+   Confidence scoring + physiological sanity checks + warnings.
+
+6. **Output Layer**  
+   English/Urdu clinical summaries + machine-readable JSON.
+
+7. **Evaluation Layer**  
+   Dataset benchmarking with error analysis and latency metrics.
+
+## Stack
 
 - Python
 - Streamlit
 - OpenCV
 - PyMuPDF
-- pytesseract
-- Rule-based clinical parser and range engine
-- Optional local translation model (`Helsinki-NLP/opus-mt-en-ur`)
+- pytesseract (Tesseract OCR)
+- pandas
+- unittest / pytest-compatible workflow
 
-## Project Structure
+## Repository Layout
 
 ```text
 pakistan-lab-report-ai/
   app.py
   requirements.txt
+  benchmark-data/
+  pages/
+    01_Benchmark_Dashboard.py
   src/
     ocr_engine.py
     parser.py
+    report_fallback.py
+    quality.py
     range_checker.py
     explainer.py
+    benchmarking.py
     translator.py
+  tests/
+    test_pipeline.py
 ```
 
-## Setup
+## Quick Start
 
-1. Create and activate a virtual environment
-2. Install dependencies:
+1. Install dependencies:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-3. Install Tesseract OCR engine (required by `pytesseract`)
-   - Windows (recommended):
+2. Install Tesseract OCR (Windows):
 
 ```powershell
 winget install UB-Mannheim.TesseractOCR
 ```
 
-   - Then close and reopen terminal/Streamlit so PATH refreshes.
-
-4. Run app:
+3. Restart terminal, then run:
 
 ```bash
 streamlit run app.py
 ```
 
-5. Optional benchmark dashboard:
+4. Optional benchmark dashboard:
 
 ```bash
 streamlit run pages/01_Benchmark_Dashboard.py
@@ -81,35 +114,30 @@ streamlit run pages/01_Benchmark_Dashboard.py
 
 Use `benchmark-data/sample_benchmark_dataset.json` as starter dataset.
 
-## Demo Flow
+## Reliability and Quality Controls
 
-1. Upload a Pakistani lab report (CBC/LFT/RFT style).
-2. Choose patient sex and age.
-3. Review:
-   - parsed results table
-   - abnormal flags
-   - English explanation
-   - Urdu explanation
-4. Download summary for sharing with family/doctor.
+- Low-confidence row detection with configurable threshold.
+- Sanity-bound validation for implausible values.
+- Template/profile detection for document routing.
+- Structured error analysis through benchmark dashboard.
 
-## Safety and Ethics
+## Safety
 
-- This project is **not** a diagnosis tool.
-- It is for educational support and report readability.
-- Final medical decisions must be made by licensed doctors.
+- Not a diagnosis system.
+- Not a replacement for licensed medical advice.
+- Intended for report readability, triage support, and workflow acceleration.
 
-## Roadmap (for strong GitHub progression)
+## Deployment
 
-- [ ] Add OCR quality confidence scoring
-- [ ] Add table-cell extraction with document layout models
-- [ ] Add pediatric and pregnancy-specific ranges
-- [ ] Add chest X-ray module with Grad-CAM explainability
-- [ ] Add clinical validation sheet with doctor-reviewed cases
-- [ ] Expand benchmark set to 100+ anonymized local reports with versioned metrics
+Designed to deploy on Streamlit Cloud with minimal setup:
 
-## Portfolio Positioning
+- Keep repo lightweight and modular.
+- Use benchmark dashboard before each release.
+- Track precision/recall/F1 and latency per version.
 
-Use this repo title/description on GitHub:
+## Roadmap
 
-- **Title:** `SehatNama AI: Pakistan Lab Report Interpreter`
-- **Description:** `Computer Vision + Clinical NLP system that converts Pakistani lab report scans into bilingual patient explanations and abnormality alerts.`
+- Add 100+ anonymized local report benchmark set.
+- Add model-assisted layout detection for complex table documents.
+- Add stronger Urdu medical phrasing coverage.
+- Add clinical governance checklist and release QA gates.
