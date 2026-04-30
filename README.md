@@ -31,7 +31,7 @@ SehatNama AI turns those reports into structured, readable output with quality w
 - Structured JSON export for API/backoffice integration.
 - Benchmark dashboard with precision/recall/F1 and latency analytics.
 
-## Architecture (Industry Style)
+## Architecture
 
 1. **Ingestion Layer**  
    File upload, type detection, PDF rendering, image decode.
