@@ -1,8 +1,14 @@
-# SehatNama AI - Medical Report Analyzer
+# SehatNama AI - Medical Report Intelligence
 
-SehatNama AI is a healthcare document Analyzer system designed for Pakistan-focused use cases. It processes medical PDFs/images, extracts structured findings, highlights risky values when present, and generates bilingual patient-facing summaries in English and Urdu.
+**Live App:** [https://sehatnama-medical-report-analyzer.streamlit.app/](https://sehatnama-medical-report-analyzer.streamlit.app/)
+
+SehatNama AI is a healthcare document intelligence system designed for Pakistan-focused use cases. It processes medical PDFs/images, extracts structured findings, highlights risky values when present, and generates bilingual patient-facing summaries in English and Urdu.
 
 This is not a chatbot wrapper and does not depend on paid LLM APIs for core functionality.
+
+## About
+
+- **Live Product:** [https://sehatnama-medical-report-analyzer.streamlit.app/](https://sehatnama-medical-report-analyzer.streamlit.app/)
 
 ## Problem We Solve
 
@@ -33,26 +39,13 @@ SehatNama AI turns those reports into structured, readable output with quality w
 
 ## Architecture
 
-1. **Ingestion Layer**  
-   File upload, type detection, PDF rendering, image decode.
-
-2. **OCR Layer**  
-   Multi-variant preprocessing + rotation + OCR mode search.
-
-3. **Normalization Layer**  
-   OCR cleanup, unit normalization, numeric standardization.
-
-4. **Extraction Layer**  
-   Rule-based parsers for numeric rows and narrative sections.
-
-5. **Validation Layer**  
-   Confidence scoring + physiological sanity checks + warnings.
-
-6. **Output Layer**  
-   English/Urdu clinical summaries + machine-readable JSON.
-
-7. **Evaluation Layer**  
-   Dataset benchmarking with error analysis and latency metrics.
+1. **Ingestion Layer**: file upload, type detection, PDF rendering, image decode.
+2. **OCR Layer**: multi-variant preprocessing + rotation + OCR mode search.
+3. **Normalization Layer**: OCR cleanup, unit normalization, numeric standardization.
+4. **Extraction Layer**: rule-based parsers for numeric rows and narrative sections.
+5. **Validation Layer**: confidence scoring + physiological sanity checks + warnings.
+6. **Output Layer**: English/Urdu clinical summaries + machine-readable JSON.
+7. **Evaluation Layer**: dataset benchmarking with error analysis and latency metrics.
 
 ## Stack
 
@@ -63,6 +56,67 @@ SehatNama AI turns those reports into structured, readable output with quality w
 - pytesseract (Tesseract OCR)
 - pandas
 - unittest / pytest-compatible workflow
+
+## Repository Layout
+
+```text
+pakistan-lab-report-ai/
+  app.py
+  requirements.txt
+  benchmark-data/
+  pages/
+    01_Benchmark_Dashboard.py
+  src/
+    ocr_engine.py
+    parser.py
+    report_fallback.py
+    quality.py
+    range_checker.py
+    explainer.py
+    benchmarking.py
+    translator.py
+  tests/
+    test_pipeline.py
+```
+
+## Quick Start
+
+1. Install dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+2. Install Tesseract OCR (Windows):
+
+```powershell
+winget install UB-Mannheim.TesseractOCR
+```
+
+3. Restart terminal, then run:
+
+```bash
+streamlit run app.py
+```
+
+4. Optional benchmark dashboard:
+
+```bash
+streamlit run pages/01_Benchmark_Dashboard.py
+```
+
+Use `benchmark-data/sample_benchmark_dataset.json` as starter dataset.
+
+## Deploy on Hugging Face Spaces
+
+1. Create a new Hugging Face Space with **SDK = Streamlit**.
+2. Push this repository (or mirror it) to your Space.
+3. Ensure these deployment files are present:
+   - `app.py`
+   - `requirements.txt`
+   - `packages.txt` (for Tesseract system dependency)
+   - `.streamlit/config.toml`
+4. For Space README front matter, use `HF_SPACE_README_TEMPLATE.md` as reference.
 
 ## Reliability and Quality Controls
 
@@ -76,14 +130,6 @@ SehatNama AI turns those reports into structured, readable output with quality w
 - Not a diagnosis system.
 - Not a replacement for licensed medical advice.
 - Intended for report readability, triage support, and workflow acceleration.
-
-## Deployment
-
-Designed to deploy on Streamlit Cloud with minimal setup:
-
-- Keep repo lightweight and modular.
-- Use benchmark dashboard before each release.
-- Track precision/recall/F1 and latency per version.
 
 ## Roadmap
 
